@@ -1,6 +1,6 @@
-import {Components, graphql, hooks, utils as reefUtils,} from '@reef-defi/react-lib';
+import {Components, graphql, hooks, ReefSigner, utils as reefUtils, appState} from '@reef-defi/react-lib';
 import {ApolloClient, gql, SubscriptionOptions} from "@apollo/client";
-import {ethers} from 'ethers';
+import {Contract, ethers, Signer as EthersSigner} from 'ethers';
 import {from, map, Observable, scan, switchMap} from "rxjs";
 import {useEffect, useRef, useState} from "react";
 
@@ -216,37 +216,47 @@ const createContractFiltersInstance = (contractAddress: string, abi:string[]): a
 
 export const EvmEvents = (): JSX.Element => {
     const apolloClient: ApolloClient<any> | undefined = hooks.useObservableState(graphql.apolloClientInstance$);
+    const reefSigner: ReefSigner | undefined = hooks.useObservableState(appState.selectedSigner$);
     const [lastEvents, setLastEvents] = useState<any>();
-    const [contractAddress, setContractAddress] = useState('');
+    const [contractAddress, setContractAddress] = useState('0xF5B362d1e8849Dd59500546E3D36C899d449BB67');
     const customEventSubs = useRef<any>();
     const libEventSubs = useRef<any>();
 
     useEffect(() => {
         // custom graphQL example
         async function fn() {
-            if (!apolloClient) {
+            if (!apolloClient || !reefSigner || !contractAddress) {
                 return;
             }
             const methodSignature = 'Transfer(address,address,uint256)'
             customEventSubs.current?.unsubscribe();
             let fromBlockId = 0;
-            customEventSubs.current = getEvmEvents$(apolloClient, contractAddress, methodSignature, fromBlockId).subscribe((val: any) => {
+            /*customEventSubs.current = getEvmEvents$(apolloClient, contractAddress, methodSignature, fromBlockId).subscribe((val: any) => {
                 console.log("EVM EVENTS=", val);
                 setLastEvents(val)
-            });
+            });*/
             const testAbi = [
                 "event Transfer(address indexed src, address indexed dst, uint256 val)"
             ];
-            let filters = createContractFiltersInstance('0xccccc', testAbi);
-            console.log('FFFFFEEEE', filters.Transfer('0x1111'))
+            if(contractAddress) {
+                // Reefy addr= 0xF5B362d1e8849Dd59500546E3D36C899d449BB67
+                console.log("START contract listener");
+                const sig: unknown = reefSigner.signer;
+                const contract = new ethers.Contract(contractAddress, testAbi, reefSigner.signer as ethers.Signer)
+                contract.once('Transfer', (res) => {
+                    console.log("!!!!CONTRACT EVM EVENT LISTENER RES=", res);
+                });
+            }
+            /*let filters = createContractFiltersInstance('0xccccc', testAbi);
+            console.log('FFFFFEEEE', filters.Transfer('0x1111'))*/
         };
         fn();
         return () => {
             customEventSubs.current?.unsubscribe();
         }
-    }, [apolloClient, contractAddress]);
+    }, [apolloClient, contractAddress, reefSigner]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (!contractAddress) {
             return;
         }
@@ -260,7 +270,7 @@ export const EvmEvents = (): JSX.Element => {
           return ()=>{
             libEventSubs.current?.unsubscribe();
           }
-        }, [contractAddress]);
+        }, [contractAddress]);*/
 
     return (
         <>

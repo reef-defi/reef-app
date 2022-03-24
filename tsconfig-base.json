@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+  "paths": {
+    "rxjs": [
+      "./node_modules/rxjs"
+    ],
+    "rxjs/*": [
+      "./node_modules/rxjs/*"
+    ],
+    "react": [
+      "./node_modules/react"
+    ],
+    "react/*": [
+      "./node_modules/react/*"
+    ]
+  }
+  }
+}
