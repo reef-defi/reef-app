@@ -240,10 +240,10 @@ export const EvmEvents = (): JSX.Element => {
             ];
             if(contractAddress) {
                 // Reefy addr= 0xF5B362d1e8849Dd59500546E3D36C899d449BB67
-                console.log("START contract listener");
+                console.log("START contract addr=", contractAddress);
                 const sig: unknown = reefSigner.signer;
                 const contract = new ethers.Contract(contractAddress, testAbi, reefSigner.signer as ethers.Signer)
-                contract.once('Transfer', (res) => {
+                contract.on('Transfer', (res) => {
                     console.log("!!!!CONTRACT EVM EVENT LISTENER RES=", res);
                 });
             }

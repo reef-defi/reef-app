@@ -5,8 +5,9 @@
   "dependencies": {
     "@apollo/client": "^3.5.7",
     "@polkadot/extension-dapp": "^0.40.3",
+    "@reef-defi/evm-provider": "file:.yalc/@reef-defi/evm-provider",
     "@reef-defi/extension-dapp": "^0.41.2",
-    "@reef-defi/react-lib": "^1.0.36",
+    "@reef-defi/react-lib": "file:.yalc/@reef-defi/react-lib",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -33,7 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --fix --ext .ts,.tsx ./src/"
+    "lint": "eslint --fix --ext .ts,.tsx ./src/",
+    "yalc:update": "yalc add @reef-defi/react-lib && yalc add @reef-defi/evm-provider"
   },
   "eslintConfig": {
     "extends": [
