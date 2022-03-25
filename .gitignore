@@ -28,3 +28,4 @@ yarn-error.log*
 /.idea/reef-app.iml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/.yalc/

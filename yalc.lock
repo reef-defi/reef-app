@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "packages": {
+    "@reef-defi/react-lib": {
+      "signature": "a9b1507d205d08ccc07adcce1f4ed2cc",
+      "file": true,
+      "replaced": "^1.0.36"
+    },
+    "@reef-defi/evm-provider": {
+      "signature": "e9c05fbda5b2a3246f924706400ed03b",
+      "file": true
+    }
+  }
+}
