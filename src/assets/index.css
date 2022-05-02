@@ -319,3 +319,7 @@ input.form-control:focus {
     justify-content: flex-end;
     align-items: center;
 }
+
+.btn-container .btn-reef{
+	width: 100%;
+}

@@ -15,6 +15,7 @@ export const REMOVE_LIQUIDITY_URL = '/remove-supply/:address1/:address2';
 export const TRANSFER_TOKEN = '/send';
 export const CREATE_ERC20_TOKEN_URL = '/create-token';
 export const BONDS_URL = '/bonds';
+export const CARD_URL = '/card';
 
 export const addressReplacer = (url: string, address1: string, address2: string): string => url
   .replace(':address1', address1)

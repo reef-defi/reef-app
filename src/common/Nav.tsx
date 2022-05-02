@@ -8,6 +8,7 @@ import { saveSignerLocalPointer } from '../store/internalStore';
 import { ReefLogo } from './Icons';
 import {
   BONDS_URL,
+  CARD_URL,
   CREATE_ERC20_TOKEN_URL, DASHBOARD_URL, defaultSwapUrl, POOLS_URL, TRANSFER_TOKEN,
 } from '../urls';
 
@@ -18,6 +19,7 @@ const menuItems = [
   { title: 'Pools', url: POOLS_URL },
   { title: 'Staking', url: BONDS_URL },
   { title: 'Creator', url: CREATE_ERC20_TOKEN_URL },
+  { title: 'Card', url: CARD_URL },
 ];
 
 export interface Nav {
