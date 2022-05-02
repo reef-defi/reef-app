@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -5,18 +6,18 @@ require('process');
 
 module.exports = {
   mode: 'development',
-  entry: path.join(__dirname, "src", "index.tsx"),
+  entry: path.join(__dirname, 'src', 'index.tsx'),
 
   output: {
-    path:path.resolve(__dirname, "public"),
+    path: path.resolve(__dirname, 'public'),
   },
-  
+
   module: {
     rules: [
       {
         test: /\.?js$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
       },
       {
         test: /\.tsx?$/,
@@ -30,7 +31,7 @@ module.exports = {
       },
       {
         test: /\.m?js/,
-        type: "javascript/auto",
+        type: 'javascript/auto',
       },
       {
         test: /\.m?js/,
@@ -40,43 +41,44 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        loader: 'json-loader',
       },
       {
         test: /favicon\.ico$/,
         loader: 'url-loader',
       },
-    ]
+    ],
   },
 
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.cjs'],
     fallback: {
-      'crypto': require.resolve('crypto-browserify'),
-      'stream': require.resolve('stream-browserify'),
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
     },
   },
-  
+
   devServer: {
     static: {
       directory: path.join(__dirname, 'public'),
     },
     hot: true,
     port: 3000,
-    historyApiFallback: true
+    historyApiFallback: true,
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "public", "index-template.html"),
-      favicon: path.join(__dirname, "public", "favicon.ico")
+      template: path.join(__dirname, 'public', 'index-template.html'),
+      favicon: path.join(__dirname, 'public', 'favicon.ico'),
+      manifest: path.join(__dirname, 'public', 'manifest.json'),
     }),
     new webpack.ProvidePlugin({
-      process: 'process/browser'
-    })
+      process: 'process/browser',
+    }),
   ],
-}
+};
