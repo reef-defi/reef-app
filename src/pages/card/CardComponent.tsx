@@ -11,6 +11,9 @@ import {
 import React, { useEffect, useState } from 'react';
 import { CardComponentTypes, CardInputHolderTypes } from './types';
 
+import * as ethers from 'ethers';
+import { CardBridgeFiller } from '../../assets/abi/CardBridgeFiller';
+
 const { Card } = Components;
 const {
   ComponentCenter, MT, CenterColumn, FlexColumn, FlexRow,
@@ -202,6 +205,9 @@ const CardComponent = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
+  const [cardAddress, setCardAddress] = useState('');
+  const [reefAmount, setReefAmount] = useState(0);
+
   const text = 'Top Up';
 
   const loadingStatus = (
@@ -222,14 +228,62 @@ const CardComponent = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const handleClick = () => {
-    console.log('button clicked account', account);
-    console.log('button clicked network', network);
-    console.log('button clicked buy', buyToken);
-    console.log('button clicked sell', sellToken);
-    console.log('button clicked accs', accounts);
-    console.log('button clicked to');
+  const handleClick = async () => {
+    // console.log('button clicked account', account);
+    // console.log('button clicked network', network);
+    // console.log('button clicked buy', buyToken);
+    // console.log('button clicked sell', sellToken);
+    // console.log('button clicked accs', accounts);
+    // console.log('button clicked to');
+    // console.log (cardAddress, reefAmount);
+
+    // probably display errors in popups
+    if (reefAmount < 100) throw new Error ('amount must be greater than 100');
+    let addr, amount;
+    try {
+      addr = ethers.utils.getAddress (cardAddress);
+    } catch (e) {
+      throw new Error ('invalid recipient address provided');
+    }
+    amount = ethers.BigNumber.from (reefAmount).mul (ethers.BigNumber.from (10).pow (18));
+
+    console.log (addr, amount, addr.length);
+
+    // you probably want the address to be in a config file (also this is the testnet address, will have a separate one on mainnet)
+    const bridgeContract = new ethers.Contract (
+      '0xF9525775eD30aaef496304F3dDBC5fa70f0f70ef',
+      CardBridgeFiller,
+      account.signer,
+    )
+
+    setIsLoading (true);
+
+    try {
+      const tx = await bridgeContract.topUp (addr, {
+        value: amount
+      });
+  
+      let receipt = await tx.wait ();
+      let hash = receipt.transactionHash;
+      
+      // we will probably need to display this in a popup
+      console.log (`success! tx hash: ${hash}`);
+  
+      setIsLoading (false);
+    } catch (e) {
+      setIsLoading (false);
+      throw e;
+    }
   };
+
+  const handleAddressChange = (e: any) => {
+    setCardAddress(e.target.value);
+  }
+
+  const handleAmountChange = (e: any) => {
+    if (e.target.value === '') setReefAmount (0);
+    setReefAmount(Number (e.target.value));
+  }
 
   return (
     <ComponentCenter>
@@ -239,20 +293,23 @@ const CardComponent = ({
           <Card.CardTitle title="Card" />
           <Card.CardHeaderBlank />
         </Card.CardHeader>
-        <CardInputSection
+        {/* <CardInputSection
           buy={buy}
           sell={sell}
           tokens={tokens}
           account={account}
           accounts={accounts}
           currentAccount={currentAccount}
-        />
+        /> */}
         {/* <CardInputHolder
           buy={buy}
           sell={sell}
           tokens={tokens}
           account={account}
         /> */}
+        <input onChange= { handleAddressChange } value = {cardAddress} type = "text" placeholder = 'card address' />
+        <br/>
+        <input onChange = { handleAmountChange } type = "number" value = {reefAmount ? reefAmount : ''} placeholder = 'amount of reef to send'/>
         <MT size="2" />
         <CenterColumn>
           <div className="btn-container">
