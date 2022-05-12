@@ -280,13 +280,12 @@ const CardComponent = ({
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleAddressChange = (e: any) => {
-    setCardAddress(e.target.value);
+    setCardAddress(e);
   };
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleAmountChange = (e: any) => {
-    if (e.target.value === '') setReefAmount('0');
-    setReefAmount(e.target.value);
+    setReefAmount(e || '');
   };
 
   return (
