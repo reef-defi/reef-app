@@ -22,8 +22,8 @@ const { OpenModalButton } = Components.Modal;
 const { Button } = Components.Button;
 const { LoadingButtonIconWithText } = Components.Loading;
 const { TokenAmountFieldMax, TokenAmountFieldImpactPrice, AccountListModal } = Components;
+const { NumberInput, Input } = Components.Input;
 const { SwitchTokenButton } = Components.Button;
-const { Input } = Components.Input;
 const { MiniText } = Components.Text;
 const { SubCard } = Card;
 
@@ -206,7 +206,7 @@ const CardComponent = ({
   const [isValid, setIsValid] = useState(false);
 
   const [cardAddress, setCardAddress] = useState('');
-  const [reefAmount, setReefAmount] = useState(0);
+  const [reefAmount, setReefAmount] = useState<string>('');
 
   const text = 'Top Up';
 
@@ -238,7 +238,7 @@ const CardComponent = ({
     // console.log (cardAddress, reefAmount);
 
     // probably display errors in popups
-    if (reefAmount < 100) throw new Error('amount must be greater than 100');
+    if (Number(reefAmount) < 100) throw new Error('amount must be greater than 100');
     let addr;
     try {
       addr = ethers.utils.getAddress(cardAddress);
@@ -285,8 +285,8 @@ const CardComponent = ({
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleAmountChange = (e: any) => {
-    if (e.target.value === '') setReefAmount(0);
-    setReefAmount(Number(e.target.value));
+    if (e.target.value === '') setReefAmount('0');
+    setReefAmount(e.target.value);
   };
 
   return (
@@ -305,25 +305,28 @@ const CardComponent = ({
           accounts={accounts}
           currentAccount={currentAccount}
         /> */}
+        <MT size="2">
+          <Input
+            className="form-control form-control-lg border-rad"
+            value={cardAddress}
+            onChange={handleAddressChange}
+            placeholder="Card Address"
+          />
+        </MT>
+        <MT size="2">
+          <NumberInput
+            className="form-control form-control-lg border-rad"
+            value={reefAmount}
+            onChange={handleAmountChange}
+            placeholder="Amount of REEF to send"
+          />
+        </MT>
         {/* <CardInputHolder
           buy={buy}
           sell={sell}
           tokens={tokens}
           account={account}
         /> */}
-        <input
-          onChange={handleAddressChange}
-          value={cardAddress}
-          type="text"
-          placeholder="card address"
-        />
-        <br />
-        <input
-          onChange={handleAmountChange}
-          type="number"
-          value={reefAmount || ''}
-          placeholder="amount of reef to send"
-        />
         <MT size="2" />
         <CenterColumn>
           <div className="btn-container">
