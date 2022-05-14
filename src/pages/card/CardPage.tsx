@@ -10,11 +10,9 @@ import TokenContext from '../../context/TokenContext';
 
 const CardPage: React.FC = () => {
   const signer: ReefSigner|undefined = hooks.useObservableState(appState.selectedSigner$);
-  const tokens = useContext(TokenContext);
 
-  const currentAccount: ReefSigner | undefined = hooks.useObservableState(
-    appState.selectedSigner$,
-  ) as ReefSigner;
+  const currentAccount:ReefSigner|undefined = hooks.useObservableState(appState.selectedSigner$);
+  const tokens = useContext(TokenContext);
 
   if (!tokens || !signer || !currentAccount) {
     return <div>Loading...</div>;

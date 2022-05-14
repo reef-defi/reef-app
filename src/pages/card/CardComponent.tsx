@@ -2,7 +2,6 @@
 import {
   Components,
   utils,
-  ReefSigner,
   reefTokenWithAmount,
   Token,
   createEmptyTokenWithAmount,
