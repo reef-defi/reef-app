@@ -278,6 +278,19 @@ const CardComponent = ({
     }
   };
 
+  const getText = () : string => {
+    if (isLoading) {
+      return 'Loading...';
+    }
+    if (cardAddress.length ===0) {
+      return 'Card address is required';
+    }
+    if (reefAmount === '') {
+      return 'Amount is required';
+    }
+    return text;
+  };
+
   const changeSellToken = (): void => {};
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -307,7 +320,7 @@ const CardComponent = ({
           currentAccount={currentAccount}
         /> */}
         <SubCard>
-          <MT size="2">
+          <MT size="1">
             <Input
               className="form-control form-control-lg border-rad"
               value={cardAddress}
@@ -315,8 +328,9 @@ const CardComponent = ({
               placeholder="Card Address"
             />
           </MT>
+          <MT size="2" />
         </SubCard>
-        <MT size="2">
+        <MT size="1">
           {/* <NumberInput
             className="form-control form-control-lg border-rad"
             value={reefAmount}
@@ -341,13 +355,13 @@ const CardComponent = ({
         <MT size="2" />
         <CenterColumn>
           <div className="btn-container">
-            <Button disabled={isLoading} onClick={handleClick}>
+            <Button disabled={isLoading || cardAddress.length === 0 || reefAmount === ''} onClick={handleClick}>
               {isLoading ? (
                 <LoadingButtonIconWithText
                   text={loadingStatus('', false, false)}
                 />
               ) : (
-                text
+                getText()
               )}
             </Button>
           </div>
