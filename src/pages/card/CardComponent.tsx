@@ -278,6 +278,8 @@ const CardComponent = ({
     }
   };
 
+  const changeSellToken = (): void => {};
+
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleAddressChange = (e: any) => {
     setCardAddress(e);
@@ -304,20 +306,30 @@ const CardComponent = ({
           accounts={accounts}
           currentAccount={currentAccount}
         /> */}
+        <SubCard>
+          <MT size="2">
+            <Input
+              className="form-control form-control-lg border-rad"
+              value={cardAddress}
+              onChange={handleAddressChange}
+              placeholder="Card Address"
+            />
+          </MT>
+        </SubCard>
         <MT size="2">
-          <Input
-            className="form-control form-control-lg border-rad"
-            value={cardAddress}
-            onChange={handleAddressChange}
-            placeholder="Card Address"
-          />
-        </MT>
-        <MT size="2">
-          <NumberInput
+          {/* <NumberInput
             className="form-control form-control-lg border-rad"
             value={reefAmount}
             onChange={handleAmountChange}
             placeholder="Amount of REEF to send"
+          /> */}
+          <TokenAmountFieldMax
+            token={sell}
+            tokens={tokens}
+            signer={account}
+            id="sell-token-field"
+            onAmountChange={handleAmountChange}
+            onTokenSelect={changeSellToken}
           />
         </MT>
         {/* <CardInputHolder
