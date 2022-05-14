@@ -21,6 +21,8 @@ export const Transfer = (): JSX.Element => {
     return <div />;
   }
 
+  console.log('Transfer:', { accounts, selectedSigner, tokens });
+
   return (
     <Send
       notify={notify}

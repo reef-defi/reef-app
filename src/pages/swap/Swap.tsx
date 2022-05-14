@@ -19,6 +19,8 @@ const Swap = (): JSX.Element => {
 
   const { address1, address2 } = useParams<UrlAddressParams>();
 
+  console.log(address1, address2);
+
   const [token1, token2, state] = useTokensFinder({
     address1,
     address2,

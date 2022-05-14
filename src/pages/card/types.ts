@@ -8,13 +8,8 @@ import { TxStatusHandler } from '@reef-defi/react-lib/dist/utils';
 
 export interface CardComponentTypes {
   tokens: Token[];
-  buyToken: TokenWithAmount;
-  sellToken: TokenWithAmount;
-  network: Network;
   account: ReefSigner;
-  accounts: ReefSigner[];
   currentAccount: ReefSigner;
-  onTxUpdate?: TxStatusHandler;
 }
 
 export interface CardInputHolderTypes {
