@@ -14,14 +14,18 @@ import { CardBridgeFiller } from '../../assets/abi/CardBridgeFiller';
 
 const { calculateAmount } = utils;
 const { Card } = Components;
-const {
-  ComponentCenter, MT, CenterColumn,
-} = Components.Display;
+const { ComponentCenter, MT, CenterColumn } = Components.Display;
 const { Button } = Components.Button;
 const { LoadingButtonIconWithText } = Components.Loading;
 const { TokenAmountFieldMax } = Components;
 const { Input } = Components.Input;
 const { SubCard } = Card;
+
+const NotificationAlert: React.FC<unknown> = ({ children }): JSX.Element => (
+  <div className="alert alert-success mt-2 border-rad" role="alert">
+    {children}
+  </div>
+);
 
 const CardComponent = ({
   tokens,
@@ -30,13 +34,19 @@ const CardComponent = ({
 }: CardComponentTypes): JSX.Element => {
   const [token, setToken] = useState(reefTokenWithAmount());
   const [isLoading, setIsLoading] = useState(false);
+  const [notification, setNotification] = useState({
+    status: false,
+    message: '',
+  });
 
   const [cardAddress, setCardAddress] = useState('');
 
   const text = 'Top Up';
 
   useEffect(() => {
-    const alignedToken = tokens.find(({ address }) => address === token.address);
+    const alignedToken = tokens.find(
+      ({ address }) => address === token.address,
+    );
 
     if (alignedToken) {
       setToken({ ...token, balance: alignedToken.balance });
@@ -102,6 +112,11 @@ const CardComponent = ({
       const hash = receipt.transactionHash;
 
       // we will probably need to display this in a popup
+      setNotification({
+        status: true,
+        message: `Success! Transaction hash: ${hash}`,
+      });
+
       console.log(`success! tx hash: ${hash}`);
 
       setIsLoading(false);
@@ -111,7 +126,7 @@ const CardComponent = ({
     }
   };
 
-  const getText = () : string => {
+  const getText = (): string => {
     if (isLoading) {
       return 'Loading...';
     }
@@ -131,6 +146,9 @@ const CardComponent = ({
 
   return (
     <ComponentCenter>
+      {notification.status && (
+        <NotificationAlert>{notification.message}</NotificationAlert>
+      )}
       <Card.Card>
         <Card.CardHeader>
           <Card.CardHeaderBlank />
@@ -181,7 +199,12 @@ const CardComponent = ({
         <MT size="2" />
         <CenterColumn>
           <div className="btn-container">
-            <Button disabled={isLoading || cardAddress.length === 0 || token.amount === ''} onClick={handleClick}>
+            <Button
+              disabled={
+                isLoading || cardAddress.length === 0 || token.amount === ''
+              }
+              onClick={handleClick}
+            >
               {isLoading ? (
                 <LoadingButtonIconWithText
                   text={loadingStatus('', false, false)}
